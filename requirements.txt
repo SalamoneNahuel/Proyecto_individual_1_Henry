@@ -1,5 +1,6 @@
 fastapi
 pandas
+setuptools
 numpy
 Enum
 datetime
