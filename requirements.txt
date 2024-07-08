@@ -2,7 +2,6 @@ fastapi
 pandas
 setuptools
 numpy
-Enum
 datetime
 sklearn
 pyarrow
