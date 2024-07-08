@@ -10,7 +10,7 @@ app = FastAPI()
 
 # Define la ruta del archivo Parquet
 parquet_eda = "Datasets/dataset_peliculas.parquet"
-parquet_vect = "Datasets/dataset_vect.parquet"
+parquet_vect = pd.read_parquet("Datasets/dataset_vect.parquet")
 
 vec_tfidf = {}
 tfidf_lis = []
@@ -391,7 +391,7 @@ async def info_director(nombre_director: str):
 async def recomendacion(titulo_de_la_filmación: str):
 
     try:
-        df = pd.read_parquet(parquet_vect)
+        df = parquet_vect
 
         result = get_recomendations(df, titulo_de_la_filmación, top_n=5)
         return {"result": result}
