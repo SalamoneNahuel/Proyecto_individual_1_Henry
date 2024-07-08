@@ -1,6 +1,7 @@
 from fastapi import FastAPI, HTTPException
 from enum import Enum
 import pandas as pd
+import datetime
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
@@ -9,7 +10,7 @@ app = FastAPI()
 
 # Define la ruta del archivo Parquet
 parquet_eda = "Datasets/dataset_peliculas.parquet"
-parquet_vect = pd.read_parquet("Datasets/dataset_vect.parquet")
+parquet_vect = "Datasets/dataset_vect.parquet"
 
 vec_tfidf = {}
 tfidf_lis = []
@@ -387,12 +388,12 @@ async def info_director(nombre_director: str):
 
     # Ruta para obtener recomendacion desde el archivo Parquet
 @app.get("/recomendacion/{titulo}")
-async def get_recomendations(df, titulo_de_la_filmación, top_n=5):
+async def recomendacion(titulo_de_la_filmación: str):
 
     try:
-        df = parquet_vect
+        df = pd.read_parquet(parquet_vect)
 
-        result = votos_titulo(df, titulo_de_la_filmación)
+        result = get_recomendations(df, titulo_de_la_filmación, top_n=5)
         return {"result": result}
 
     except FileNotFoundError:
