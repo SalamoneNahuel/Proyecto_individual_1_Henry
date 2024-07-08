@@ -1,7 +1,7 @@
 from fastapi import FastAPI, HTTPException
 from enum import Enum
 import pandas as pd
-import datetime
+from datetime import datetime as dt
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
@@ -54,18 +54,18 @@ def cantidad_filmaciones_mes(df, mes):
 
     return(f"{count} películas fueron estrenadas en el mes de {mes}")
     
-# Funcion numero de peliculas estrenadas en el día de semana
-def cantidad_filmaciones_día(df, día):
+# Funcion numero de peliculas estrenadas en el dia de semana
+def cantidad_filmaciones_dia(df, dia):
 
     """
-    Hace un recuento de todas las peliculas que se estrenaron en un determinado día de la semana
-    :param día: Día del cual se quiere obtener el numero de peliculas
+    Hace un recuento de todas las peliculas que se estrenaron en un determinado dia de la semana
+    :param dia: Dia del cual se quiere obtener el numero de peliculas
     :param df: El dataframe a consultar
     :return: Int con el total del recuento
     """
 
-    # Creamos un diccionario con los días que funciona como referencia iterable y se le asigna un valor a cada uno
-    días_semana = {
+    # Creamos un diccionario con los dias que funciona como referencia iterable y se le asigna un valor a cada uno
+    dias_semana = {
         'Lunes': 0,
         'Martes': 1,
         'Miércoles': 2,
@@ -75,10 +75,10 @@ def cantidad_filmaciones_día(df, día):
         'Domingo': 6
         }
 
-    selector = días_semana[día] # Variable a referenciar igualada al valor correspondiente al día
+    selector = dias_semana[dia] # Variable a referenciar igualada al valor correspondiente al dia
     count = df['release_date'].dt.weekday.value_counts().get(selector, 0) # Contamos las veces que aparece el valor en el dataset
     
-    return(f"{count} películas fueron estrenadas en un día {día}")
+    return(f"{count} películas fueron estrenadas en un día {dia}")
 
 
 
@@ -233,22 +233,7 @@ def get_director(df, nombre_director):
     else:
         return (f"No se encontro un director que contenga '{nombre_director}' en el nombre.")
 
-class month(str, Enum):
-    enero = 'Enero'
-    febrero = 'Febrero'
-    marzo = 'Marzo'
-    abril = 'Abril'
-    mayo = 'Mayo'
-    junio = 'Junio'
-    julio = 'Julio'
-    agosto = 'Agosto'
-    septiembre = 'Septiembre'
-    octubre = 'Octubre'
-    noviembre = 'Noviembre'
-    diciembre = 'Diciembre'
-
-    # Ruta para obtener numero de peliculas estrenadas en el mes desde el archivo Parquet
-
+# Funcion sistema de recomendacion
 def get_recomendations(df, titulo_de_la_filmación, top_n=5):
     
     title = titulo_de_la_filmación.lower()
@@ -288,6 +273,21 @@ def get_recomendations(df, titulo_de_la_filmación, top_n=5):
     else:
         return (f"No se encontraron peliculas que contengan '{titulo_de_la_filmación}' en el titulo")
 
+class month(str, Enum):
+    enero = 'Enero'
+    febrero = 'Febrero'
+    marzo = 'Marzo'
+    abril = 'Abril'
+    mayo = 'Mayo'
+    junio = 'Junio'
+    julio = 'Julio'
+    agosto = 'Agosto'
+    septiembre = 'Septiembre'
+    octubre = 'Octubre'
+    noviembre = 'Noviembre'
+    diciembre = 'Diciembre'
+
+    # Ruta para obtener numero de peliculas estrenadas en el mes desde el archivo Parquet
 @app.get("/estrenos_en_mes/{mes}")
 async def estrenos_en_mes(mes: month):
 
@@ -311,14 +311,14 @@ class weekday(str, Enum):
     sábado = 'Sábado'
     domingo = 'Domingo'
 
-    # Ruta para obtener numero de peliculas estrenadas en el día desde el archivo Parquet
-@app.get("/estrenos_en_día/{día}")
-async def estrenos_en_día_semana(día: weekday):
+    # Ruta para obtener numero de peliculas estrenadas en el dia desde el archivo Parquet
+@app.get("/estrenos_en_dia/{dia}")
+async def estrenos_en_dia_semana(dia: weekday):
 
     try:
         df = pd.read_parquet(parquet_eda)
 
-        result = cantidad_filmaciones_día(df,día.value)
+        result = cantidad_filmaciones_dia(df,dia.value)
         return {"result": result}
 
     except FileNotFoundError:
