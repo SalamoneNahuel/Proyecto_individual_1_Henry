@@ -1,5 +1,6 @@
 fastapi
 pandas==2.2.1
+datetime
 setuptools==70.1.1
 numpy==1.26.4
 scikit-learn==1.5.0

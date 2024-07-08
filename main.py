@@ -387,7 +387,7 @@ async def info_director(nombre_director: str):
 
     # Ruta para obtener recomendacion desde el archivo Parquet
 @app.get("/recomendacion/{titulo}")
-async def votos_pelicula(titulo_de_la_filmación: str):
+async def get_recomendations(df, titulo_de_la_filmación, top_n=5):
 
     try:
         df = parquet_vect
