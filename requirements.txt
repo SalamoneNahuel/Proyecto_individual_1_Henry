@@ -1,0 +1,8 @@
+fastapi
+pandas
+numpy
+Enum
+datetime
+sklearn
+pyarrow
+uvicorn[standard]
