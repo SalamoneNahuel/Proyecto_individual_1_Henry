@@ -5,6 +5,7 @@ from datetime import datetime as dt
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
+import gc
 
 app = FastAPI()
 
@@ -291,16 +292,12 @@ class month(str, Enum):
 @app.get("/estrenos_en_mes/{mes}")
 async def estrenos_en_mes(mes: month):
 
-    try:
-        df = pd.read_parquet(parquet_eda)
+    df = pd.read_parquet(parquet_eda)
+    result = cantidad_filmaciones_mes(df,mes.value)
+    del df
+    gc.collect()
+    return {"result": result}
 
-        result = cantidad_filmaciones_mes(df,mes.value)
-        return {"result": result}
-
-    except FileNotFoundError:
-        raise HTTPException(status_code=404, detail="Archivo Parquet no encontrado, revisa si la ruta del archivo es correcta.")
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error al leer el archivo Parquet: {str(e)}")
     
 class weekday(str, Enum):
     lunes = 'Lunes'
@@ -315,90 +312,60 @@ class weekday(str, Enum):
 @app.get("/estrenos_en_dia/{dia}")
 async def estrenos_en_dia_semana(dia: weekday):
 
-    try:
-        df = pd.read_parquet(parquet_eda)
-
-        result = cantidad_filmaciones_dia(df,dia.value)
-        return {"result": result}
-
-    except FileNotFoundError:
-        raise HTTPException(status_code=404, detail="Archivo Parquet no encontrado, revisa si la ruta del archivo es correcta.")
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error al leer el archivo Parquet: {str(e)}")
+    df = pd.read_parquet(parquet_eda)
+    result = cantidad_filmaciones_dia(df,dia.value)
+    del df
+    gc.collect()
+    return {"result": result}
     
     # Ruta para obtener el score de peliculas desde el archivo Parquet
 @app.get("/score_pelicula/{titulo}")
 async def score_pelicula(titulo_de_la_filmación: str):
 
-    try:
-        df = pd.read_parquet(parquet_eda)
-
-        result = score_titulo(df, titulo_de_la_filmación)
-        return {"result": result}
-
-    except FileNotFoundError:
-        raise HTTPException(status_code=404, detail="Archivo Parquet no encontrado, revisa si la ruta del archivo es correcta.")
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error al leer el archivo Parquet: {str(e)}")
+    df = pd.read_parquet(parquet_eda)
+    result = score_titulo(df, titulo_de_la_filmación)
+    del df
+    gc.collect()
+    return {"result": result}
     
     # Ruta para obtener el promedio de voto de peliculas desde el archivo Parquet
 @app.get("/votos_pelicula/{titulo}")
 async def votos_pelicula(titulo_de_la_filmación: str):
 
-    try:
-        df = pd.read_parquet(parquet_eda)
+    df = pd.read_parquet(parquet_eda)
+    result = votos_titulo(df, titulo_de_la_filmación)
+    del df
+    gc.collect()
+    return {"result": result}    
 
-        result = votos_titulo(df, titulo_de_la_filmación)
-        return {"result": result}
-
-    except FileNotFoundError:
-        raise HTTPException(status_code=404, detail="Archivo Parquet no encontrado, revisa si la ruta del archivo es correcta.")
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error al leer el archivo Parquet: {str(e)}")
-    
     # Ruta para obtener info de un actor desde el archivo Parquet
 @app.get("/info_actor/{nombre}")
 async def info_actor(nombre_actor: str):
 
-    try:
-        df = pd.read_parquet(parquet_eda)
-
-        result = get_actor(df, nombre_actor)
-        return {"result": result}
-
-    except FileNotFoundError:
-        raise HTTPException(status_code=404, detail="Archivo Parquet no encontrado, revisa si la ruta del archivo es correcta.")
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error al leer el archivo Parquet: {str(e)}")
+    df = pd.read_parquet(parquet_eda)
+    result = get_actor(df, nombre_actor)
+    del df
+    gc.collect()
+    return {"result": result}
     
     # Ruta para obtener info de un directo desde el archivo Parquet
 @app.get("/info_director/{nombre}")
 async def info_director(nombre_director: str):
 
-    try:
-        df = pd.read_parquet(parquet_eda)
-
-        result = get_director(df, nombre_director)
-        return {"result": result}
-
-    except FileNotFoundError:
-        raise HTTPException(status_code=404, detail="Archivo Parquet no encontrado, revisa si la ruta del archivo es correcta.")
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error al leer el archivo Parquet: {str(e)}")
+    df = pd.read_parquet(parquet_eda)
+    result = get_director(df, nombre_director)
+    del df
+    gc.collect()
+    return {"result": result}   
 
     # Ruta para obtener recomendacion desde el archivo Parquet
 @app.get("/recomendacion/{titulo}")
 async def recomendacion(titulo_de_la_filmación: str):
 
-    try:
-        df = parquet_vect
-
-        result = get_recomendations(df, titulo_de_la_filmación, top_n=5)
-        return {"result": result}
-
-    except FileNotFoundError:
-        raise HTTPException(status_code=404, detail="Archivo Parquet no encontrado, revisa si la ruta del archivo es correcta.")
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error al leer el archivo Parquet: {str(e)}")
+    df = parquet_vect
+    result = get_recomendations(df, titulo_de_la_filmación, top_n=5)
+    del df
+    gc.collect()
+    return {"result": result}   
     
     
