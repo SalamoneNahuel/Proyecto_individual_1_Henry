@@ -9,7 +9,6 @@ import gc
 
 app = FastAPI()
 
-# Define la ruta del archivo Parquet
 parquet_eda = "Datasets/dataset_peliculas.parquet"
 parquet_vect = pd.read_parquet("Datasets/dataset_vect.parquet")
 
