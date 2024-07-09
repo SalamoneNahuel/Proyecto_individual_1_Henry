@@ -5,10 +5,15 @@ Como objetivo profesional, el 'Cliente' nos pidió tener desarrollado un MVP de 
 Los desafíos que se pueden identificar a simple vista son dos:
 1. La baja calidad y madurez de la base de datos.
 2. La velocidad con la que se tiene que llevar a cabo el proyecto.
+
 Dada las circunstancias, ¡mejor será que nos pongamos manos a la obra!
 
 ## Índice
-[TOC]
+1. [Introducción](#introducción)
+2. [Consideraciones Iniciales](#'Consideraciones-iniciales')
+3. [Extracción, Carga y Transformación de los Datos (ETL)](#Extracción,-Carga-y-Transformación-de-los-Datos-(ETL))
+4. [Creación de funciones](#Creación-de-funciones)
+
 
 ## Consideraciones iniciales
 Contamos con una base de datos compuesta por dos archivos CSV (**movies_dataset.csv y credits.csv**) de alrededor de 45.000 filas de datos brutos que deben ser procesados para su uso en 6 funciones mínimas (detalladas más adelante) pedidas explícitamente por el cliente.
@@ -18,7 +23,6 @@ Es necesario también un Análisis Exploratorio de los Datos (EDA) que será usa
 A continuación, se hace un resumen del proceso completo.
 
 ## Extracción, Carga y Transformación de los Datos (ETL)
-
 Dentro de los Notebooks se encuentra el archivo ETL que contiene el proceso detallado mediante el cual se dio forma a los datos.
 La información se encontraba separada en dos archivos: **movies_dataset.csv** contiene información general de las películas, mientras que **credits.csv** está orientado a las personas que participaron de la filmación de los metrajes.
 Los datos dentro de los archivos no estaban normalizados, por lo que no estaban listos para ser trabajados. Se tuvo que hacer un proceso de desanidado de columnas y extracción de la información, así como también la eliminación de columnas que no aportaban valor y traían complejidad al proyecto.
@@ -31,7 +35,7 @@ Además, se crearon nuevas columnas que iban a ser necesarias para el correcto f
 ## Creación de funciones
 En el archivo **main.py** se pueden ver las funciones creadas en detalle.
 Se utiliza la librería FastAPI para crear la API que permitirá acceder a ellas. Cada una hace una consulta a la base de datos procesada en el paso anterior que le permite extraer información relevante.
-Los 6 endpoints dan acceso a las funciones a continuación:
+Los 6 endpoints dan acceso a las funciones detalladas a continuación:
 - Películas por mes: Se selecciona un mes del año y se hace un conteo del número de filmaciones estrenadas en él.
 - Películas por día: Se selecciona un día de la semana y se hace un conteo del número de filmaciones estrenadas en él.
 - Score de película: Se escribe el título de una filmación y retorna su año de estreno y un valor numérico en representación de su popularidad.
@@ -45,3 +49,6 @@ Terminadas las funciones se hizo un deploy en Render.
 [Aquí](https://proyecto-individual-1-henry-k9qg.onrender.com/docs) puedes acceder a ella.
 
 ![API Page](img/api_page.png)
+
+## Analisis Exploratorio de los Datos (EDA)
+Dentro de los Notebooks se encuentra el archivo EDA que contiene el proceso detallado mediante el cual se analizo la relevancia de los datos y se hicieron los ajustes necesarios para su funcionamiento.
