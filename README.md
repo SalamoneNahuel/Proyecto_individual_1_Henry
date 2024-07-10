@@ -46,6 +46,8 @@ Los 6 endpoints dan acceso a las funciones detalladas a continuación:
 - Información de actor: Se escribe el nombre de un actor y retorna el número de filmaciones en las que ha participado, el porcentaje de retorno de sus películas total y promedio a lo largo de su carrera.
 - Información de director: Se escribe el nombre de un director y retorna el número y lista de filmaciones en las que ha participado solo como director, junto con su porcentaje de retorno.
 
+Si quieres verlas en uso [aqui tienes](https://www.youtube.com/watch?v=bUv69UtLJz4) un video demostracion.
+
 ![API Main](img/api_main.png)
 
 Terminadas las funciones se hizo un deploy en Render.
